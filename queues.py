@@ -19,3 +19,7 @@ class Queue:
 
     def dequeue(self):
         return self._elements.popleft()
+
+class Stack(Queue): #Inherits the Queue class.
+    def dequeue(self): #Overrides the function of dequeue in the parent class.
+        return self._elements.pop() #Remove the elements on the right, removes the last in.
