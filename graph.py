@@ -1,6 +1,6 @@
 from typing import NamedTuple
 import networkx as nx
-from queues import Queue
+from queues import Queue, Stack
 from collections import deque
 
 class City(NamedTuple):
@@ -45,9 +45,7 @@ def breadth_first_traverse(graph, source, order_by=None):
                 queue.enqueue(neighbor)
 
 def breadth_first_search(graph, source, predicate, order_by=None):
-    for node in breadth_first_traverse(graph, source, order_by):
-        if predicate(node):
-            return node
+    return search(breadth_first_traverse, graph, source, predicate, order_by)
 
 def retrace(previous, source, destination):
     path = deque()
@@ -81,3 +79,24 @@ def shortest_path(graph, source, destination, order_by=None):
 
 def connected(graph, source, destination):
     return shortest_path(graph, source, destination) is not None
+
+def depth_first_traverse(graph, source, order_by=None):
+    stack = Stack(source)
+    visited = set()
+    while stack:
+        if (node := stack.dequeue()) not in visited:
+            yield node
+            visited.add(node)
+            neighbors = list(graph.neighbors(node))
+            if order_by:
+                neighbors.sort(key=order_by)
+            for neighbor in reversed(neighbors):
+                stack.enqueue(neighbor)
+
+def depth_first_search(graph, source, predicate, order_by=None):
+    return search(depth_first_traverse, graph, source, predicate, order_by)
+
+def search(traverse, graph, source, predicate, order_by=None):
+    for node in traverse(graph, source, order_by):
+        if predicate(node):
+            return node
