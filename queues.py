@@ -75,3 +75,4 @@ class MutableMinHeap(IterableMixin):
 
     def dequeue(self):
         return heappop(self._elements).value
+
