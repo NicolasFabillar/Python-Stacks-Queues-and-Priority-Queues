@@ -78,3 +78,6 @@ def shortest_path(graph, source, destination, order_by=None):
                 previous[neighbor] = node
                 if neighbor == destination:
                     return retrace(previous, source, destination)
+
+def connected(graph, source, destination):
+    return shortest_path(graph, source, destination) is not None
